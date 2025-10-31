@@ -1,24 +1,24 @@
 <?php
 include 'conecta.php';
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['nome_usuario'])) {
+if (!isset($_SESSION['email_usuario'])) {
     header('Location: index.php');
+    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nova_senha = $_POST['nova_senha'];
-    $nome_usuario = $_SESSION['nome_usuario'];
+    $email_usuario = $_SESSION['email_usuario'];
 
-    // Query para alteração da senha do usuário
-    $sql = "";
+    $sql = "UPDATE usuarios SET senha = :nova_senha WHERE email = :email_usuario";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam();
-    $stmt->bindParam(':nome_usuario', $nome_usuario);
+    $stmt->bindParam(':nova_senha', $nova_senha);
+    $stmt->bindParam(':email_usuario', $email_usuario);
 
     try {
         $stmt->execute();
-        header('Location: inicio.php'); // Redireciona para a página inicial após alterar a senha
+        header('Location: inicio.php');
+        exit();
     } catch (PDOException $e) {
         echo "<div class='alert alert-danger'>Erro: " . $e->getMessage() . "</div>";
     }
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Nova senha</label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Alterar senha</button>
-            <a class="w-100 btn btn-lg btn-secondary mt-3" href="/inicio.php">Cancelar</a>
+            <a class="w-100 btn btn-lg btn-secondary mt-3" href="inicio.php">Cancelar</a>
         </form>
     </div>
 </body>

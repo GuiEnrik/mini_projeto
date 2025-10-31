@@ -2,18 +2,18 @@
 include 'conecta.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome_usuario = $_POST['nome_usuario'];
+    $email_usuario = $_POST['email_usuario'];
     $senha_usuario = $_POST['senha_usuario'];
 
-    // Query de inserção
-    $sql = " ";
+    $sql = "INSERT INTO usuarios (email, senha) VALUES (:email_usuario, :senha_usuario)";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam();
-    $stmt->bindParam();
+    $stmt->bindParam(':email_usuario', $email_usuario);
+    $stmt->bindParam(':senha_usuario', $senha_usuario);
 
     try {
         $stmt->execute();
-        header('Location: index.php'); // Redireciona para a página inicial após o cadastro
+        header('Location: index.php');
+        exit();
     } catch (PDOException $e) {
         echo "<div class='alert alert-danger'>Erro: " . $e->getMessage() . "</div>";
     }
@@ -38,15 +38,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <h1 class="h3 mb-3 fw-normal text-center">Cadastre-se</h1>
             <div class="form-floating mb-3">
-                <input type="text" name="nome_usuario" class="form-control" placeholder="Nome de usuário" required>
-                <label>Nome de usuário</label>
+                <input type="text" name="email_usuario" class="form-control" placeholder="E-mail do usuário" required>
+                <label>E-mail do usuário</label>
             </div>
             <div class="form-floating mb-3">
                 <input type="password" name="senha_usuario" class="form-control" placeholder="Senha" required>
                 <label>Senha</label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Cadastrar</button>
-            <a class="w-100 btn btn-lg btn-secondary mt-3" href="/inicio.php">Voltar</a>
+            <a class="w-100 btn btn-lg btn-secondary mt-3" href="index.php">Voltar</a>
         </form>
     </div>
 </body>

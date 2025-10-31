@@ -2,21 +2,21 @@
 include 'conecta.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome_usuario = $_POST['nome_usuario'];
+    $email_usuario = $_POST['email_usuario'];
     $senha_usuario = $_POST['senha_usuario'];
 
-    // Query de verificação do usuário e senha
-    $sql = " ";
+    $sql = "SELECT * FROM usuarios WHERE email = :email_usuario AND senha = :senha_usuario";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam();
-    $stmt->bindParam();
+    $stmt->bindParam(':email_usuario', $email_usuario);
+    $stmt->bindParam(':senha_usuario', $senha_usuario);
 
     $stmt->execute();
     $usuario = $stmt->fetch();
 
     if ($usuario) {
-        $_SESSION['nome_usuario'] = $usuario['nome'];
-        header('Location: inicio.php'); // Redireciona para a página inicial após login
+        $_SESSION['email_usuario'] = $usuario['email'];
+        header('Location: inicio.php');
+        exit();
     } else {
         $erro = "Usuário ou senha incorretos.";
     }
@@ -44,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="alert alert-danger"><?php echo $erro; ?></div>
             <?php endif; ?>
             <div class="form-floating mb-3">
-                <input type="text" name="nome_usuario" class="form-control" placeholder="Nome de usuário" required>
-                <label>Nome de usuário</label>
+                <input type="text" name="email_usuario" class="form-control" placeholder="E-mail de usuário" required>
+                <label>E-mail de usuário</label>
             </div>
             <div class="form-floating mb-3">
                 <input type="password" name="senha_usuario" class="form-control" placeholder="Senha" required>

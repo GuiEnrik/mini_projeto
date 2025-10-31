@@ -1,12 +1,12 @@
 <?php
 include 'conecta.php';
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['nome_usuario'])) {
-    header('Location: index.php'); // Redireciona para o login se não estiver logado
+if (!isset($_SESSION['email_usuario'])) {
+    header('Location: index.php');
+    exit();
 }
 
-$nome_usuario = $_SESSION['nome_usuario'];
+$email_usuario = $_SESSION['email_usuario'];
 ?>
 
 <!DOCTYPE html>
@@ -21,18 +21,14 @@ $nome_usuario = $_SESSION['nome_usuario'];
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <!-- Logo -->
         <img class="navbar-brand" src="https://placehold.co/150x70?text=Meu%20App" alt="Logo" height="50">
         
-        <!-- Botão do menu colapsável para telas menores -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         
-        <!-- Conteúdo do menu -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
             <ul class="navbar-nav">
-                <!-- Dropdown "Minha Conta" -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="contaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person-circle"></i> Minha Conta
@@ -42,7 +38,6 @@ $nome_usuario = $_SESSION['nome_usuario'];
                         <li><a class="dropdown-item text-danger" href="excluir_conta.php"><i class="bi bi-trash"></i> Excluir Conta</a></li>
                     </ul>
                 </li>
-                <!-- Opção para Logout -->
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php"><i class="bi bi-box-arrow-right"></i> Sair</a>
                 </li>
@@ -51,10 +46,8 @@ $nome_usuario = $_SESSION['nome_usuario'];
     </div>
 </nav>
 
-
-
 <div class="container mt-5 text-center">
-    <h1>Bem-vindo, <?php echo $nome_usuario; ?>!</h1>
+    <h1>Bem-vindo, <?php echo htmlspecialchars($email_usuario); ?>!</h1>
     <p class="lead">Esta é sua página inicial.</p>
 </div>
 

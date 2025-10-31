@@ -1,25 +1,20 @@
 <?php
 include 'conecta.php';
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['nome_usuario'])) {
-    header('Location: index.php'); // Redireciona para a página de login
+if (!isset($_SESSION['email_usuario'])) {
+    header('Location: index.php');
     exit();
 }
 
-// Exclui a conta do usuário logado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome_usuario = $_SESSION['nome_usuario'];
+    $email_usuario = $_SESSION['email_usuario'];
 
-    // Define a query para excluir o usuário do banco de dados
-    $sql = " ";
+    $sql = "DELETE FROM usuarios WHERE email = :email_usuario";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam();
+    $stmt->bindParam(':email_usuario', $email_usuario);
 
     try {
         $stmt->execute();
-
-        // Destroi a sessão e redireciona para o login após exclusão da conta
         session_destroy();
         header('Location: index.php');
         exit();
